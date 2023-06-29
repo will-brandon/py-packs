@@ -20,9 +20,8 @@ setuptools.setup(
     url='git@github.com:will-brandon/py-packs.git',
     license='GPL v3',
     author='Will Brandon',
-    packages=['src'],
+    packages=['pywbu'],
     py_modules=['console'],
-    install_requires=[],
     classifiers=[
         'Intended Audience :: Developers',
         'Operating System :: MacOS :: MacOS X'
