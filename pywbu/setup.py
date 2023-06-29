@@ -5,26 +5,25 @@ Type:   Python Package Setup Script
 Author: Will Brandon
 Date:   June 23, 2023
 
-Builds and installs the pyutils pip module.
+Builds and installs the pywbu module.
 """
 
 import setuptools
 
 
-# Use setuptools to build / install the module.
+# Use setuptools to build or install the module.
 setuptools.setup(
     name='pywbu',
     version='1.0.0',
     description='Python general utilities library',
     long_description='Python general utilities library for file IO, console IO, etc.',
+    url='git@github.com:will-brandon/py-packs.git',
     license='GPL v3',
     author='Will Brandon',
-    packages=['pywbu'],
+    packages=['src'],
     py_modules=['console'],
-    url='git@github.com:will-brandon/pywbu.git',
     install_requires=[],
     classifiers=[
-        'Development Status :: 4 - Beta',
         'Intended Audience :: Developers',
         'Operating System :: MacOS :: MacOS X'
         'Operating System :: Unix',

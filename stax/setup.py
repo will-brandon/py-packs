@@ -1,32 +1,39 @@
+"""
+setup.py
+
+Type:   Python Package Setup Script
+Author: Will Brandon
+Date:   June 23, 2023
+
+Builds and installs the stax module.
+"""
+
 import setuptools
 
-VERSION = '0.1.0'
-DESC = 'Web module configuration service'
-LONG_DESC = 'Web module configuration service using Docker Compose'
 
+# Use setuptools to build or install the module.
 setuptools.setup(
     name='stax',
     version='0.0.1',
-    description=DESC,
-    long_description=LONG_DESC,
+    description='Web module configuration service',
+    long_description='Web module configuration service using Docker Compose',
+    url='git@github.com:will-brandon/py-packs.git',
     license='GPL v3',
     author='Will Brandon',
-    packages=['stax'],
+    packages=['src'],
     package_data={
         'stax': ['info.txt']
     },
-    url='git@github.com:will-brandon/stax.git',
-    install_requires=['pywbu'],
+    #install_requires=['pywbu'],
     entry_points = {
         'console_scripts': [
-            'stax=stax.cli:main'
+            'a=stax.cli:main'
         ]
     },
     classifiers=[
-        'Development Status :: 3 - Alpha',
         'Intended Audience :: Developers',
         'Operating System :: MacOS :: MacOS X'
-        'Operating System :: Linux :: Ubuntu',
+        'Operating System :: Unix',
         'License :: OSI Approved :: GNU General Public License v3 (GPLv3)',
         'Programming Language :: Python :: 3.6'
     ]

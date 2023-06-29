@@ -1,5 +1,5 @@
 
-qimport pywbu.console as csl
+import pywbu.console as csl
 
 def main():
     csl.warn('Success!!')
