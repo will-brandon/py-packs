@@ -1,8 +1,9 @@
 
-import pywbu.console as csl
+#import pywbu.console as csl
 
 def main():
-    csl.warn('Success!!')
+    print("Test")
+    #csl.warn('Success!!')
 
 if __name__ == '__main__':
     main()

@@ -8,6 +8,9 @@
 #
 # Usage:	make
 
+# Use Bash shell script.
+SHELL := /bin/bash
+
 # Define the package name.
 PACKAGE=pywbu
 

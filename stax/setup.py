@@ -24,7 +24,7 @@ setuptools.setup(
     package_data={
         'stax': ['info.txt']
     },
-    #install_requires=['pywbu'],
+    install_requires=['pywbu'],
     entry_points = {
         'console_scripts': [
             'a=stax.cli:main'
