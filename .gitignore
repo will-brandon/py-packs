@@ -1,0 +1,25 @@
+# .gitignore
+#
+# Type:     Git Ignore List
+# Author:   Will Brandon
+# Date:     May 22, 2023
+#
+# Provides specifers to target files that should be ignored from the Git SCM working tree.
+
+# macOS Metadata
+*.DS_Store
+*.localized
+
+# VS Code Metadata
+*.vscode
+
+# Python Caches
+*__pycache__
+*dist
+*.egg-info
+
+# Output / Builds
+*.build
+*build
+*.output
+*output
