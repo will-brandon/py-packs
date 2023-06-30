@@ -6,13 +6,13 @@ Author:     Will Brandon
 Created:    June 23, 2023
 Revised:    June 30, 2023
 
-Builds and installs the stax module.
+Builds and installs the stax package.
 """
 
 import setuptools
 
 
-# Use setuptools to build or install the module.
+# Use setuptools to build or install the package.
 setuptools.setup(
     name='stax',
     version='0.0.1',

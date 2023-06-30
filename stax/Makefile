@@ -3,7 +3,7 @@
 # Type:		GNU Makefile
 # Author:	Will Brandon
 # Created: 	June 28, 2023
-# Revised:	June 29, 2023
+# Revised:	June 30, 2023
 #
 # Builds, installs, uninstalls, and cleans the stax package.
 #
@@ -39,6 +39,9 @@ clean:
 	rm -rf dist
 	rm -rf ${PACKAGE}.egg-info
 	rm -rf ${PACKAGE}/__pycache__
+
+# This target purges any previous build and installations then rebuilds and reinstalls the package.
+restart: start purge
 
 # All targets are phony i.e. do not refer to literal files.
 .PHONY: start build install purge uninstall clean

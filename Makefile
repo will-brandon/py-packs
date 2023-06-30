@@ -3,7 +3,7 @@
 # Type:		GNU Makefile
 # Author:	Will Brandon
 # Created: 	June 29, 2023
-# Revised:	-
+# Revised:	June 30, 2023
 #
 # Builds, installs, uninstalls, and cleans all python py-packs packages.
 #
@@ -21,6 +21,9 @@ start: start-pywbu start-stax
 
 # This target removes all py-packs packages from pip and cleans out the build.
 purge: purge-stax purge-pywbu
+
+# This target purges any previous build and installations then rebuilds and reinstalls the package.
+restart: start purge
 
 # The following targets start and purge each package by calling submakes.
 start-pywbu:
