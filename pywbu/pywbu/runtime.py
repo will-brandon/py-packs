@@ -9,6 +9,7 @@ Revised:    -
 Contains functionality to help maintain the program runtime.
 """
 
+from typing import Callable
 import sys
 import pywbu.console as csl
 
@@ -18,7 +19,7 @@ EXIT_SUCCESS = 0
 EXIT_FAILURE = 1
 
 
-def main(func: object) -> object:
+def main(func: Callable[[list[str]], int]) -> Callable[[], None]:
     """
     Decorates the entrypoint of a program. The decorated function will be given a list of
     command-line arguments as a parameter. The returned integer value of the decorated function will
@@ -27,7 +28,7 @@ def main(func: object) -> object:
     """
 
     # Create a wrapper function that will be returned.
-    def wrapper():
+    def wrapper() -> None:
             
             # Try to execute the wrapped function.
             try:

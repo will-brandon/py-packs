@@ -23,7 +23,7 @@ start: start-pywbu start-stax
 purge: purge-stax purge-pywbu
 
 # This target purges any previous build and installations then rebuilds and reinstalls the package.
-restart: start purge
+restart: purge start
 
 # The following targets start and purge each package by calling submakes.
 start-pywbu:
@@ -36,4 +36,4 @@ purge-stax:
 	make -C stax purge
 
 # All targets are phony i.e. do not refer to literal files.
-.PHONY: start purge
+.PHONY: start purge restart start-pywbu purge-pywbu start-stax purge-stax

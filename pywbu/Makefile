@@ -41,7 +41,7 @@ clean:
 	rm -rf ${PACKAGE}/__pycache__
 
 # This target purges any previous build and installations then rebuilds and reinstalls the package.
-restart: start purge
+restart: purge start
 
 # All targets are phony i.e. do not refer to literal files.
-.PHONY: start build install purge uninstall clean
+.PHONY: start build install purge uninstall clean restart
