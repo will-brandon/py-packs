@@ -2,7 +2,8 @@
 #
 # Type:		GNU Makefile
 # Author:	Will Brandon
-# Date: 	June 29, 2023
+# Created: 	June 29, 2023
+# Revised:	-
 #
 # Builds, installs, uninstalls, and cleans all python py-packs packages.
 #

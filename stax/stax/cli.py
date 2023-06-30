@@ -1,11 +1,11 @@
 import pywbu.console as csl
 from pywbu.runtime import *
 
-@main(handle_key_interrupt=True)
+@main
 def main(argv: list[str]) -> int:
     
     while True:
-        print(argv)
+        csl.log(argv)
 
     return EXIT_SUCCESS
 

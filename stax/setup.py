@@ -1,9 +1,10 @@
 """
 setup.py
 
-Type:   Python Package Setup Script
-Author: Will Brandon
-Date:   June 23, 2023
+Type:       Python Package Setup Script
+Author:     Will Brandon
+Created:    June 23, 2023
+Revised:    June 30, 2023
 
 Builds and installs the stax module.
 """

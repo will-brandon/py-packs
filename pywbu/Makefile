@@ -2,7 +2,8 @@
 #
 # Type:		GNU Makefile
 # Author:	Will Brandon
-# Date: 	June 28, 2023
+# Created: 	June 28, 2023
+# Revised:	June 29, 2023
 #
 # Builds, installs, uninstalls, and cleans the pywbu package.
 #

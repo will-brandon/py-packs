@@ -2,7 +2,8 @@
 #
 # Type:     Git Ignore List
 # Author:   Will Brandon
-# Date:     May 22, 2023
+# Created:  May 22, 2023
+# Revised:  -
 #
 # Provides specifers to target files that should be ignored from the Git SCM working tree.
 
