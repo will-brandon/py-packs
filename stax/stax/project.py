@@ -11,7 +11,6 @@ The command-line entrypoint for the stax package.
 
 import stax
 import argparse as ap
-import pywbu.filesystem as fs
 from pywbu.runtime import *
 
 
@@ -37,12 +36,8 @@ def parse_args(argv: list[str]) -> ap.Namespace:
 @main
 def main(argv: list[str]) -> int:
 
-    #args = parse_args(argv)
+    args = parse_args(argv)
 
-    #print(args)
+    print(args)
 
     return EXIT_SUCCESS
-
-
-if __name__ == '__main__':
-    main()

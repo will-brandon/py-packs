@@ -14,9 +14,15 @@ import sys
 import pywbu.console as csl
 
 
-# Define default exit codes for indicating success and failure for the runtime of a program.
 EXIT_SUCCESS = 0
+"""
+0, an exit code widely accepted as indicating a successful program execution.
+"""
+
 EXIT_FAILURE = 1
+"""
+1, an exit code widely accepted as indicating an erroneous program execution.
+"""
 
 
 def main(func: Callable[[list[str]], int]) -> Callable[[], None]:

@@ -12,16 +12,35 @@ Contains functionality to interact with the console.
 import sys
 
 
-# Determines whether logging to standard output is enabled and whether output to all streams should
-# be formatted.
 logging_enabled = True
-warnings_enabled = True
-formatted_output = True
+"""
+Determines whether log output is enabled.
+"""
 
-# Determines which stream should be used for log messages, warnings, and errors.
+warnings_enabled = True
+"""
+Determines whether warnings are enabled.
+"""
+
+formatted_output = True
+"""
+Determines whether output should be written to streams with ANSI format codes.
+"""
+
 log_stream = sys.stdout
+"""
+Determines which stream log messages will be written to.
+"""
+
 warn_stream = sys.stdout
+"""
+Determines which stream warning messages will be written to.
+"""
+
 err_stream = sys.stderr
+"""
+Determines which stream error messages will be written to.
+"""
 
 
 def err(msg: str, exit_code: int=1, spacing: tuple[int, int]=(0, 0)) -> None:
