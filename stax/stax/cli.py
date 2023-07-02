@@ -29,8 +29,8 @@ def parse_args(argv: list[str]) -> None:
     init_parser = operation_subparsers.add_parser('init')
     dismantle_parser = operation_subparsers.add_parser('dismantle')
 
-    init_parser.add_argument('path', nargs=1, default=os.getcwd())
-    dismantle_parser.add_argument('path', nargs=1, default=os.getcwd())
+    init_parser.add_argument('path', nargs='?', default=os.getcwd())
+    dismantle_parser.add_argument('path', nargs='?', default=os.getcwd())
 
     args = parser.parse_args(argv[1:])
 
