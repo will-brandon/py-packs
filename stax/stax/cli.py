@@ -9,37 +9,40 @@ Revised:    June 30, 2023
 The command-line entrypoint for the stax package.
 """
 
-import stax
-import argparse as ap
-import pywbu.filesystem as fs
+import os
+from pathlib import Path
+from argparse import ArgumentParser
 from pywbu.runtime import *
+import stax
+import stax.project as proj
 
 
-def parse_args(argv: list[str]) -> ap.Namespace:
+def parse_args(argv: list[str]) -> None:
 
-    parser = ap.ArgumentParser(
+    parser = ArgumentParser(
         prog=stax.PACK_NAME,
         description='123 abc',
         epilog=f'{stax.PACK_AUTHOR} | {stax.PACK_CREATION}'
     )
 
-    subparsers = parser.add_subparsers(dest='operation')
+    operation_subparsers = parser.add_subparsers(dest='operation', required=True)
+    init_parser = operation_subparsers.add_parser('init')
+    dismantle_parser = operation_subparsers.add_parser('dismantle')
 
-    init_parser = subparsers.add_parser('init')
-    demolish_parser = subparsers.add_parser('demolish')
-    create_parser = subparsers.add_parser('create')
-    remove_parser = subparsers.add_parser('remove')
-    
+    init_parser.add_argument('path', nargs=1, default=os.getcwd())
+    dismantle_parser.add_argument('path', nargs=1, default=os.getcwd())
 
-    return parser.parse_args(argv[1:])
+    args = parser.parse_args(argv[1:])
+
+    match args.operation:
+        case 'init': proj.init(Path(args.path))
+        case 'dismantle': proj.dismantle(Path(args.path))
 
 
 @main
 def main(argv: list[str]) -> int:
 
-    #args = parse_args(argv)
-
-    #print(args)
+    parse_args(argv)
 
     return EXIT_SUCCESS
 

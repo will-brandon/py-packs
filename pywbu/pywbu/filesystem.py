@@ -45,12 +45,12 @@ def parent_step(path: Path, steps: int=1) -> Path:
     """
 
     # Use a canonical version of the path.
-    canonical = canonical_path(path)
+    path = canonical_path(path)
 
     # If the number of backward steps to take is less than one or if the path is the root of the
     # filesystem heirarchy then just return the given path.
-    if steps < 1 or canonically_equals(canonical, ROOT):
-        return canonical
+    if steps < 1 or canonically_equals(path, ROOT):
+        return path
 
     # Recursively continue traversing up the directory tree if more steps are present.
-    return parent_step(canonical.parent, steps - 1)
+    return parent_step(path.parent, steps - 1)
