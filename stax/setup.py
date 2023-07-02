@@ -9,11 +9,11 @@ Revised:    June 30, 2023
 Builds and installs the stax package.
 """
 
-import setuptools
+import setuptools as setup
 
 
 # Use setuptools to build or install the package.
-setuptools.setup(
+setup.setup(
     name='stax',
     version='0.0.1',
     description='Web module configuration service',
@@ -21,11 +21,11 @@ setuptools.setup(
     url='git@github.com:will-brandon/py-packs.git',
     license='GPL v3',
     author='Will Brandon',
-    packages=['stax'],
+    packages=setup.find_packages(),
     #install_requires=['pywbu'],
     entry_points={
         'console_scripts': [
-            'stax=stax.cli:main'
+            'stax=stax.cli.cli:main'
         ]
     },
     classifiers=[

@@ -4,16 +4,16 @@ setup.py
 Type:       Python Package Setup Script
 Author:     Will Brandon
 Created:    June 23, 2023
-Revised:    June 30, 2023
+Revised:    July 2, 2023
 
 Builds and installs the pywbu package.
 """
 
-import setuptools
+import setuptools as setup
 
 
 # Use setuptools to build or install the package.
-setuptools.setup(
+setup.setup(
     name='pywbu',
     version='1.0.0',
     description='Python general utilities library',
@@ -21,8 +21,7 @@ setuptools.setup(
     url='git@github.com:will-brandon/py-packs.git',
     license='GPL v3',
     author='Will Brandon',
-    packages=['pywbu'],
-    py_modules=['console'],
+    packages=setup.find_packages(),
     classifiers=[
         'Intended Audience :: Developers',
         'Operating System :: MacOS :: MacOS X'

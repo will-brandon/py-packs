@@ -9,12 +9,12 @@ Revised:    June 30, 2023
 The command-line entrypoint for the stax package.
 """
 
-import os
-from pathlib import Path
 from argparse import ArgumentParser
 from pywbu.runtime import *
 import stax
-import stax.project as proj
+from stax.cli.opset import OperationSet
+from stax.cli.initop import InitOperation
+from stax.cli.dismantleop import DismantleOperation
 
 
 def parse_args(argv: list[str]) -> None:
@@ -25,19 +25,16 @@ def parse_args(argv: list[str]) -> None:
         epilog=f'{stax.PACK_AUTHOR} | {stax.PACK_CREATION}'
     )
 
-    operation_subparsers = parser.add_subparsers(dest='operation', required=True)
-    init_parser = operation_subparsers.add_parser('init')
-    dismantle_parser = operation_subparsers.add_parser('dismantle')
-
-    init_parser.add_argument('path', nargs='?', default=os.getcwd())
-    dismantle_parser.add_argument('path', nargs='?', default=os.getcwd())
+    opset = OperationSet('operation')
+    opset.add_operations(InitOperation(), DismantleOperation())
+    opset.configure_parser(parser)
 
     args = parser.parse_args(argv[1:])
 
-    match args.operation:
-        case 'init': proj.init(Path(args.path))
-        case 'dismantle': proj.dismantle(Path(args.path))
+    print(args)
 
+
+from abc import ABC
 
 @main
 def main(argv: list[str]) -> int:
