@@ -21,6 +21,18 @@ metadata is stored within the directory.
 """
 
 
+def is_project(path: Path) -> bool:
+    """
+    Determines whether the given path points to a directory that contains a stax project.
+    """
+
+    # Create a path to the metadata directory within the project directory.
+    meta_dir_path = path / META_DIR_NAME
+
+    # If the project contains a metadata subdirectory, assume it is a project.
+    return meta_dir_path.is_dir()
+
+
 def init(path: Path) -> None:
     """
     Initializes a stax project in the given directory. If the directory does not already exist it

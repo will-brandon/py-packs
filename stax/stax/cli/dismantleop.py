@@ -52,6 +52,13 @@ class DismantleOperation(Operation):
         # Add a project directory path argument that defaults to the current working directory.
         subparser.add_argument('path', nargs='?', default=os.getcwd())
 
+        # Add a flag to force the action without confirmation.
+        subparser.add_argument(
+            '-f', '--force',
+            action='store_true',
+            help='instructs the program to force the dismantling without a confirmation message'
+        )
+
 
     @override
     def exec(self, args: Namespace) -> None:
@@ -59,9 +66,23 @@ class DismantleOperation(Operation):
         Executes the operation given a namespace of parsed arguments.
         """
 
+        # Create a path object.
+        path = Path(args.path)
+
+        # If the path does not point to a stax project display a warning and return immediately.
+        if not proj.is_project(path):
+            csl.warn(f'The given path does not point to a stax project: "{path}".')
+            return
+
+        # Confirm that the user wants to perform this dangerous action unless the force flag was
+        # specified.
+        if not args.force and not csl.confirm_yn('This will delete project configurations! Are ' \
+                                                + 'you sure?'):
+            return
+
         # Try to dismantle the project.
         try:
-            proj.dismantle(Path(args.path))
+            proj.dismantle(path)
         
         # If an exception is raised just display a warning message.
         except Exception as exc:

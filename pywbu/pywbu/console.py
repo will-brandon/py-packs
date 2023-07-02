@@ -27,19 +27,29 @@ formatted_output = True
 Determines whether output should be written to streams with ANSI format codes.
 """
 
-log_stream = sys.stdout
+log_ostream = sys.stdout
 """
-Determines which stream log messages will be written to.
-"""
-
-warn_stream = sys.stdout
-"""
-Determines which stream warning messages will be written to.
+Determines which output stream log messages will be written to.
 """
 
-err_stream = sys.stderr
+warn_ostream = sys.stdout
 """
-Determines which stream error messages will be written to.
+Determines which output stream warning messages will be written to.
+"""
+
+err_ostream = sys.stderr
+"""
+Determines which output stream error messages will be written to.
+"""
+
+confirm_ostream = sys.stdout
+"""
+Determines which output stream confirmation messages will be written to.
+"""
+
+confirm_istream = sys.stdin
+"""
+Determines which input stream confirmation responses will be read from.
 """
 
 
@@ -58,9 +68,12 @@ def err(msg: str, exit_code: int=1, spacing: tuple[int, int]=(0, 0)) -> None:
     # Display a formatted error message if formatted output is enabled. Otherwise display an
     # unformatted message.
     if formatted_output:
-        err_stream.write(f'{top}\033[0;91mError:\033[0m {msg}{bottom}\n')
+        err_ostream.write(f'{top}\033[0;91mError:\033[0m {msg}{bottom}\n')
     else:
-        err_stream.write(f'{top}Error: {msg}{bottom}\n')
+        err_ostream.write(f'{top}Error: {msg}{bottom}\n')
+    
+    # Flush the stream to ensure the message is displayed.
+    err_ostream.flush()
 
     # If the exit code is not None exit with the given code.
     if exit_code:
@@ -104,9 +117,12 @@ def warn(msg: str, exit_code: int=None, spacing: tuple[int, int]=(0, 0)) -> bool
     # Display a formatted warning message if formatted output is enabled. Otherwise display an
     # unformatted message.
     if formatted_output:
-        warn_stream.write(f'{top}\033[0;33mWarning:\033[0m {msg}{bottom}\n')
+        warn_ostream.write(f'{top}\033[0;33mWarning:\033[0m {msg}{bottom}\n')
     else:
-        warn_stream.write(f'{top}Warning: {msg}{bottom}\n')
+        warn_ostream.write(f'{top}Warning: {msg}{bottom}\n')
+    
+    # Flush the stream to ensure the message is displayed.
+    warn_ostream.flush()
 
     # If the exit code is not None exit with the given code.
     if exit_code:
@@ -150,7 +166,37 @@ def log(msg: str=None, spacing: tuple[int, int]=(0, 0)) -> bool:
     (top_spacing, bottom_spacing) = spacing
     top, bottom = '\n' * top_spacing, '\n' * bottom_spacing
     
-    # Write the message to the appropriate output stream and return true indicating that the log
-    # message was successfully written to the stream.
-    log_stream.write(f'{top}{msg if msg else ""}{bottom}\n')
+    # Write the message to the appropriate output stream then flush the stream to ensure the message
+    # is displayed.
+    log_ostream.write(f'{top}{msg if msg else ""}{bottom}\n')
+    log_ostream.flush()
+
+    # Return true indicating that the log message was successfully written to the stream.
     return True
+
+
+def confirm_yn(msg: str=None) -> bool:
+
+    # If the message is not None or blank display it.
+    if msg and msg != '':
+        confirm_ostream.write(f'{msg}\n')
+    
+    # Write a prompt message to the proper stream then flush the stream to ensure the message is
+    # displayed.
+    confirm_ostream.write('Confirm (y/n): ')
+    confirm_ostream.flush()
+
+    # Read the option from the input stream and ignore the newline character.
+    option = confirm_istream.readline()[:-1]
+
+    match option:
+        case 'y': return True
+        case 'n':
+            confirm_ostream.write('Aborting.\n')
+            confirm_ostream.flush()
+            return False
+        case _:
+            confirm_ostream.write('Invalid option, aborting.\n')
+            confirm_ostream.flush()
+    
+    return False

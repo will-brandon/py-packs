@@ -58,9 +58,17 @@ class InitOperation(Operation):
         Executes the operation given a namespace of parsed arguments.
         """
 
+        # Create a path object.
+        path = Path(args.path)
+
+        # If the path already points to a stax project display a warning and return immediately.
+        if proj.is_project(path):
+            csl.warn(f'The given path already points to a stax project: "{path}".')
+            return
+
         # Try to initialize the project.
         try:
-            proj.init(Path(args.path))
+            proj.init(path)
         
         # If an exception is raised just display a warning message.
         except Exception as exc:
