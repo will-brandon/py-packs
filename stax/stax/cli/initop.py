@@ -15,6 +15,7 @@ from argparse import ArgumentParser, Namespace
 from pywbu.annotations import override
 import pywbu.console as csl
 from pywbu.cli.op import Operation
+import stax
 import stax.project as proj
 
 
@@ -29,14 +30,15 @@ class InitOperation(Operation):
         Creates a new project initialization operation object.
         """
 
-        # Construct the operation parent class with an option name, brief help message, and long
-        # description.
+        # Construct the operation parent class with an option name, brief help message, long
+        # description, and epilogue.
         super().__init__(
             name='init',
             help='creates a new stax project',
             desc='Creates a new stax project in the current working directory (or at a specified ' \
                 + 'directory). The content of the directory becomes part of the project. A ' \
-                + f'metadata subdirectory, "{proj.META_DIR_NAME}", will be created.'
+                + f'metadata subdirectory, "{proj.META_DIR_NAME}", will be created.',
+            epilog=f'{stax.PACK_AUTHOR} | {stax.PACK_CREATION}'
         )
 
 

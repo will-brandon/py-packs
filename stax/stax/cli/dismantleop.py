@@ -15,6 +15,7 @@ from argparse import ArgumentParser, Namespace
 from pywbu.annotations import override
 import pywbu.console as csl
 from pywbu.cli.op import Operation
+import stax
 import stax.project as proj
 
 
@@ -29,15 +30,16 @@ class DismantleOperation(Operation):
         Creates a new project dismantling operation object.
         """
 
-        # Construct the operation parent class with an option name, brief help message, and long
-        # description.
+        # Construct the operation parent class with an option name, brief help message, long
+        # description, and epilogue.
         super().__init__(
             name='dismantle',
             help='removes the stax configuration from a project',
             desc='Removes the stax configuration from a project in the current working directory ' \
                 + '(or at a specified directory) deeming the directory no longer a stax project. ' \
                 + 'All items inside the directory will be left untouched except for the stax ' \
-                + f'metadata subdirectory, "{proj.META_DIR_NAME}".'
+                + f'metadata subdirectory, "{proj.META_DIR_NAME}".',
+            epilog=f'{stax.PACK_AUTHOR} | {stax.PACK_CREATION}'
         )
     
 

@@ -31,24 +31,30 @@ class Operation(ABC):
 
     __desc: str
     """
-    A long description of the operation.
+    A long description of the operation for the help page.
+    """
+
+    __epilog: str
+    """
+    An epologue message for the operation help page.
     """
 
 
-    def __init__(self, name: str, help: str=None, desc: str=None) -> None:        
+    def __init__(self, name: str, help: str=None, desc: str=None, epilog: str=None) -> None:        
         """
         Creates a new operation object and supplies the name of the operation option as well as a
-        brief help message and long description. The class is abstract so this constructor should
-        only be called in the constructor of subclasses.
+        brief help message, long description, and epilogue message. The class is abstract so this
+        constructor should only be called in the constructor of subclasses.
         """
 
         # Initialize the parent class for formality.
         super().__init__()
 
-        # Initialize the name, help, and description strings.
+        # Initialize the name, help, description, and epilogue strings.
         self.__name = name
         self.__help = help
         self.__desc = desc
+        self.__epilog = epilog
     
     
     def name(self) -> str:
@@ -66,7 +72,12 @@ class Operation(ABC):
         """
         
         # Create a subparser for the operation option.
-        subparser = subparsers.add_parser(self.__name, help=self.__help, description=self.__desc)
+        subparser = subparsers.add_parser(
+            name=self.__name,
+            help=self.__help,
+            description=self.__desc,
+            epilog=self.__epilog
+        )
 
         # Configure the arguments of the subparser.
         self._configure_args(subparser)
