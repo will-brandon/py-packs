@@ -47,6 +47,7 @@ class DismantleOperation(Operation):
         Configures the arguments of the subparser.
         """
 
+        # Add a project directory path argument that defaults to the current working directory.
         subparser.add_argument('path', nargs='?', default=os.getcwd())
 
 
@@ -56,10 +57,10 @@ class DismantleOperation(Operation):
         Executes the operation given a namespace of parsed arguments.
         """
 
+        # Try to dismantle the project.
         try:
-
             proj.dismantle(Path(args.path))
         
+        # If an exception is raised just display a warning message.
         except Exception as exc:
-
             csl.warn_exc(exc)
