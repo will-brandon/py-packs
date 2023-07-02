@@ -68,7 +68,7 @@ def err(msg: str, exit_code: int=1, spacing: tuple[int, int]=(0, 0)) -> None:
 
 
 def err_exc(
-        exc: BaseException, prefix=None, exit_code: int=None, spacing: tuple[int, int]=(0, 0)
+        exc: BaseException, prefix=None, exit_code: int=1, spacing: tuple[int, int]=(0, 0)
         ) -> None:
     """
     Displays the content of an exception's message as an error message to the standard error stream

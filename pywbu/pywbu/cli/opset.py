@@ -10,8 +10,8 @@ Defines a class that represents a set of operations to use for an argument parse
 argument.
 """
 
-from argparse import ArgumentParser
-from stax.cli.op import Operation
+from argparse import ArgumentParser, Namespace
+from pywbu.cli.op import Operation
 
 
 class OperationSet(object):
@@ -46,6 +46,7 @@ class OperationSet(object):
         """
         Returns the name of the operation set positional argument.
         """
+        
         return self.__name
 
 
@@ -88,3 +89,20 @@ class OperationSet(object):
         # parser for the operation.
         for op in self.__ops:
             op.configure_subparsers(subparsers)
+    
+    
+    def process_args(self, args: Namespace) -> None:
+        """
+        Searches the argument namespace to find the positional argument relevant to this operation
+        set and executes the operation which was specified.
+        """
+
+        # Check each operation in the set to see if it's name is the specified operation.
+        for op in self.__ops:
+
+            # Compare the names by retrieving the argument in the namespace by attribute accessor.
+            if op.name() == getattr(args, self.__name):
+                
+                # If a match was found, execute the operation and return from the function.
+                op.exec(args)
+                return

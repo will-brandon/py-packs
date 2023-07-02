@@ -11,8 +11,8 @@ The command-line entrypoint for the stax package.
 
 from argparse import ArgumentParser
 from pywbu.runtime import *
+from pywbu.cli.opset import OperationSet
 import stax
-from stax.cli.opset import OperationSet
 from stax.cli.initop import InitOperation
 from stax.cli.dismantleop import DismantleOperation
 
@@ -31,7 +31,7 @@ def parse_args(argv: list[str]) -> None:
 
     args = parser.parse_args(argv[1:])
 
-    print(args)
+    opset.process_args(args)
 
 
 from abc import ABC

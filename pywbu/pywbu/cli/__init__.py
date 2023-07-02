@@ -10,7 +10,7 @@ Indicates that the directory is a Python package and includes any meta propertie
 """
 
 
-PACK_NAME = 'stax.cli'
+PACK_NAME = 'pywbu.cli'
 """
 The name of the package.
 """

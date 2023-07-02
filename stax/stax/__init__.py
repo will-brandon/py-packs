@@ -10,7 +10,17 @@ Indicates that the directory is a Python package and includes any meta propertie
 """
 
 
-# Define meta properties.
 PACK_NAME = 'stax'
+"""
+The name of the package.
+"""
+
 PACK_AUTHOR = 'Will Brandon'
-PACK_CREATION = 'June 28, 2023'
+"""
+The author of the package.
+"""
+
+PACK_CREATION = 'June 23, 2023'
+"""
+The date in which work on the package began.
+"""
