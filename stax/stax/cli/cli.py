@@ -85,18 +85,15 @@ def process_top_level_args(parser: ArgumentParser, args: Namespace) -> None:
     # Find the path of the root of the project specified by the path.
     root = proj.root(Path(args.path))
 
-    if args.operation != 'init' and not root:
+    # If the project root could not be found and the operation is not an initialization display a
+    # warning and exit.
+    if not root and args.operation != 'init':
         csl.warn(f'No stax project found enclosing "{args.path}".', EXIT_SUCCESS)
 
     # If the root flag is specified print the root of the project that encloses the given path and
     # exit.
     if args.root:        
         print(root)
-        exit(EXIT_SUCCESS)
-
-    # If no operation was provided display the usage and exit.
-    if not args.operation:
-        parser.print_usage()
         exit(EXIT_SUCCESS)
 
 
@@ -122,11 +119,21 @@ def parse_args(argv: list[str]) -> None:
     # Configure the parser to use the operations in the operation set.
     opset.configure_parser(parser, False)
 
+    # If no command-line arguments are given display usage information and exit.
+    if len(argv) < 2:
+        parser.print_usage()
+        exit(EXIT_SUCCESS)
+
     # Parse the arguments into a namespace.
     args = parser.parse_args(argv[1:])
 
     # Process the top-level arguments.
     process_top_level_args(parser, args)
+
+    # If no operation was provided display usage information and exit.
+    if not args.operation:
+        parser.print_usage()
+        exit(EXIT_SUCCESS)
 
     # Allow the operation set to process the arguments and perform the proper operation.
     opset.process_args(args)
