@@ -38,8 +38,7 @@ class InitOperation(Operation):
             desc='Creates a new stax project in the current working directory (or at a specified ' \
                 + 'directory). The content of the directory becomes part of the project. A ' \
                 + f'metadata subdirectory, "{proj.META_DIR_NAME}", will be created.',
-            epilog=f'{stax.PACK_AUTHOR} | {stax.PACK_CREATION}'
-        )
+            epilog=f'{stax.PACK_AUTHOR} | {stax.PACK_CREATION}')
 
 
     @override
@@ -48,8 +47,7 @@ class InitOperation(Operation):
         Configures the arguments of the subparser.
         """
 
-        # Add a project directory path argument that defaults to the current working directory.
-        subparser.add_argument('path', nargs='?', default=os.getcwd())
+        pass
 
 
     @override

@@ -4,13 +4,14 @@ init.py
 Type:       Python Script
 Author:     Will Brandon
 Created:    June 30, 2023
-Revised:    -
+Revised:    July 2, 2023
 
 Manages stax projects.
 """
 
 from pathlib import Path
 import shutil as shu
+import pywbu.filesystem as fs
 from stax.exc import *
 
 
@@ -31,6 +32,29 @@ def is_project(path: Path) -> bool:
 
     # If the project contains a metadata subdirectory, assume it is a project.
     return meta_dir_path.is_dir()
+
+
+def root(path: Path=fs.cwd()) -> Path:
+    """
+    Finds the path to the root of the stax project encompasing the given path. If no enclosing
+    project exists None is returned. If there are nested projects the bottommost project in the tree
+    is found.
+    """
+
+    # Use the canonical equivalent of the path.
+    path = fs.canonical_path(path)
+    
+    # If the path is a project return the path. This is recursive base case #1.
+    if is_project(path):
+        return path
+    
+    # If the path is the root return None as no project could be found (both compared paths are
+    # already anonical). This is recursive base case #2.
+    if path == fs.ROOT:
+        return None
+
+    # Recursively check the parent directory to see if it is a stax project.
+    return root(path.parent)
 
 
 def init(path: Path) -> None:
@@ -57,7 +81,6 @@ def init(path: Path) -> None:
     # Recursively create the metadata directory at the given path (inherently creating the project
     # directory also if it does not already exist.)
     meta_dir_path.mkdir(511, True, True)
-
     
 
 def dismantle(path: str) -> None:

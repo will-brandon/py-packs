@@ -4,7 +4,7 @@ console.py
 Type:       Python Script
 Author:     Will Brandon
 Created:    June 15, 2023
-Revised:    June 30, 2023
+Revised:    July 2, 2023
 
 Contains functionality to interact with the console.
 """
@@ -76,13 +76,15 @@ def err(msg: str, exit_code: int=1, spacing: tuple[int, int]=(0, 0)) -> None:
     err_ostream.flush()
 
     # If the exit code is not None exit with the given code.
-    if exit_code:
+    if exit_code != None:
         exit(exit_code)
 
 
 def err_exc(
-        exc: BaseException, prefix=None, exit_code: int=1, spacing: tuple[int, int]=(0, 0)
-        ) -> None:
+        exc: BaseException,
+        prefix=None,
+        exit_code: int=1,
+        spacing: tuple[int, int]=(0, 0)) -> None:
     """
     Displays the content of an exception's message as an error message to the standard error stream
     and exits with the given exit code. If the exit code is None, no exit is performed. If the exit
@@ -125,7 +127,7 @@ def warn(msg: str, exit_code: int=None, spacing: tuple[int, int]=(0, 0)) -> bool
     warn_ostream.flush()
 
     # If the exit code is not None exit with the given code.
-    if exit_code:
+    if exit_code != None:
         exit(exit_code)
     
     # Return true indicating that the warning message was successfully written to the stream.
@@ -133,8 +135,10 @@ def warn(msg: str, exit_code: int=None, spacing: tuple[int, int]=(0, 0)) -> bool
 
 
 def warn_exc(
-        exc: BaseException, prefix=None, exit_code: int=None, spacing: tuple[int, int]=(0, 0)
-        ) -> bool:
+        exc: BaseException,
+        prefix=None,
+        exit_code: int=None,
+        spacing: tuple[int, int]=(0, 0)) -> bool:
     """
     Displays the content of an exception's message as a warning message to the standard error stream
     and exits with the given exit code. If the exit code is None, no exit is performed. By default
@@ -175,7 +179,13 @@ def log(msg: str=None, spacing: tuple[int, int]=(0, 0)) -> bool:
     return True
 
 
-def confirm_yn(msg: str=None) -> bool:
+def confirm(msg: str=None) -> bool:
+    """
+    Displays a yes/no confirmation message to the confirmation output stream. The function waits for
+    an input line (terminated by a newline character) in the confirmation input stream. The input is
+    used to determine whether the message was confirmed ('y' means return true) or denied ('n' or
+    anything else means return false).
+    """
 
     # If the message is not None or blank display it.
     if msg and msg != '':
@@ -186,17 +196,25 @@ def confirm_yn(msg: str=None) -> bool:
     confirm_ostream.write('Confirm (y/n): ')
     confirm_ostream.flush()
 
-    # Read the option from the input stream and ignore the newline character.
+    # Read the option from the confirmation input stream and ignore the newline character.
     option = confirm_istream.readline()[:-1]
 
+    # Determine if the specified option was 'y', 'n', or something else.
     match option:
+
+        # If 'y' was specified return true.
         case 'y': return True
+
+        # If 'n' was specified write and flush a cancelation message to the confirmation output
+        # stream and return false.
         case 'n':
             confirm_ostream.write('Aborting.\n')
             confirm_ostream.flush()
             return False
+        
+        # If any other option was specified write and flush a cancelation and invalid option message
+        # to the confirmation output stream and return false.
         case _:
             confirm_ostream.write('Invalid option, aborting.\n')
             confirm_ostream.flush()
-    
-    return False
+            return False

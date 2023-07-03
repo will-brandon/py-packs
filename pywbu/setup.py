@@ -12,7 +12,7 @@ Builds and installs the pywbu package.
 import setuptools as setup
 
 
-# Use setuptools to build or install the package.
+# Use setuptools to build and/or install the package.
 setup.setup(
     name='pywbu',
     version='1.0.0',

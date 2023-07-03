@@ -76,8 +76,7 @@ class Operation(ABC):
             name=self.__name,
             help=self.__help,
             description=self.__desc,
-            epilog=self.__epilog
-        )
+            epilog=self.__epilog)
 
         # Configure the arguments of the subparser.
         self._configure_args(subparser)

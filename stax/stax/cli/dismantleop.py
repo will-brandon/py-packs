@@ -39,8 +39,7 @@ class DismantleOperation(Operation):
                 + '(or at a specified directory) deeming the directory no longer a stax project. ' \
                 + 'All items inside the directory will be left untouched except for the stax ' \
                 + f'metadata subdirectory, "{proj.META_DIR_NAME}".',
-            epilog=f'{stax.PACK_AUTHOR} | {stax.PACK_CREATION}'
-        )
+            epilog=f'{stax.PACK_AUTHOR} | {stax.PACK_CREATION}')
     
 
     @override
@@ -49,15 +48,11 @@ class DismantleOperation(Operation):
         Configures the arguments of the subparser.
         """
 
-        # Add a project directory path argument that defaults to the current working directory.
-        subparser.add_argument('path', nargs='?', default=os.getcwd())
-
         # Add a flag to force the action without confirmation.
         subparser.add_argument(
             '-f', '--force',
             action='store_true',
-            help='instructs the program to force the dismantling without a confirmation message'
-        )
+            help='instructs the program to force the dismantling without a confirmation message')
 
 
     @override
@@ -66,18 +61,13 @@ class DismantleOperation(Operation):
         Executes the operation given a namespace of parsed arguments.
         """
 
-        # Create a path object.
-        path = Path(args.path)
-
-        # If the path does not point to a stax project display a warning and return immediately.
-        if not proj.is_project(path):
-            csl.warn(f'The given path does not point to a stax project: "{path}".')
-            return
+        # Find the root of the project.
+        path = proj.root(Path(args.path))
 
         # Confirm that the user wants to perform this dangerous action unless the force flag was
         # specified.
-        if not args.force and not csl.confirm_yn('This will delete project configurations! Are ' \
-                                                + 'you sure?'):
+        if not args.force and not csl.confirm('This will delete project configurations for ' \
+                                              + f'"{path}". Are you sure?'):
             return
 
         # Try to dismantle the project.

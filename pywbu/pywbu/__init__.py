@@ -24,3 +24,8 @@ PACK_CREATION = 'June 28, 2023'
 """
 The date in which work on the package began.
 """
+
+PACK_VERSION = '1.0.0'
+"""
+The package version.
+"""
