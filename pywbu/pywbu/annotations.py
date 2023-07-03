@@ -6,7 +6,7 @@ Author:     Will Brandon
 Created:    July 2, 2023
 Revised:    -
 
-Defines functionless decorators that serve as annotations useful to marking code.
+Defines decorators that serve as annotations useful to marking code.
 """
 
 from typing import Callable
