@@ -24,7 +24,6 @@ class InitOperation(Operation):
     Represents the command-line project initialization operation.
     """
 
-
     def __init__(self) -> None:
         """
         Creates a new project initialization operation object.
@@ -42,7 +41,7 @@ class InitOperation(Operation):
 
 
     @override
-    def _configure_args(self, subparser: ArgumentParser) -> None:
+    def _configure_args(self, _: ArgumentParser) -> None:
         """
         Configures the arguments of the subparser.
         """

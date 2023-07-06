@@ -19,6 +19,7 @@ import stax
 import stax.project as proj
 from stax.cli.initop import InitOperation
 from stax.cli.dismantleop import DismantleOperation
+from stax.cli.rootop import RootOperation
 
 
 def configure_top_level_args(parser: ArgumentParser) -> None:
@@ -57,15 +58,9 @@ def configure_top_level_args(parser: ArgumentParser) -> None:
         '-p', '--path',
         help='run the command from a location instead of the current working directory',
         default=os.getcwd())
-    
-    # Add an argument to display the project root path.
-    parser.add_argument(
-        '-R', '--root',
-        action='store_true',
-        help='display the project root path and exit')
 
 
-def process_top_level_args(parser: ArgumentParser, args: Namespace) -> None:
+def process_top_level_args(args: Namespace) -> None:
     """
     Processed the parsed arguments and performs the appropriate actions.
     """
@@ -81,20 +76,6 @@ def process_top_level_args(parser: ArgumentParser, args: Namespace) -> None:
     # If the unformatted flag is specified disable console output ANSI formatting.
     if args.unformatted:
         csl.formatted_output = False
-    
-    # Find the path of the root of the project specified by the path.
-    root = proj.root(Path(args.path))
-
-    # If the project root could not be found and the operation is not an initialization display a
-    # warning and exit.
-    if not root and args.operation != 'init':
-        csl.warn(f'No stax project found enclosing "{args.path}".', EXIT_SUCCESS)
-
-    # If the root flag is specified print the root of the project that encloses the given path and
-    # exit.
-    if args.root:        
-        print(root)
-        exit(EXIT_SUCCESS)
 
 
 def parse_args(argv: list[str]) -> None:
@@ -114,26 +95,16 @@ def parse_args(argv: list[str]) -> None:
     # Create an operation set for the operation positional argument. Add all the relevant operation
     # objects to the set.
     opset = OperationSet('operation')
-    opset.add_operations(InitOperation(), DismantleOperation())
+    opset.add_operations(InitOperation(), DismantleOperation(), RootOperation())
 
     # Configure the parser to use the operations in the operation set.
-    opset.configure_parser(parser, False)
-
-    # If no command-line arguments are given display usage information and exit.
-    if len(argv) < 2:
-        parser.print_usage()
-        exit(EXIT_SUCCESS)
+    opset.configure_parser(parser, True)
 
     # Parse the arguments into a namespace.
     args = parser.parse_args(argv[1:])
 
     # Process the top-level arguments.
-    process_top_level_args(parser, args)
-
-    # If no operation was provided display usage information and exit.
-    if not args.operation:
-        parser.print_usage()
-        exit(EXIT_SUCCESS)
+    process_top_level_args(args)
 
     # Allow the operation set to process the arguments and perform the proper operation.
     opset.process_args(args)

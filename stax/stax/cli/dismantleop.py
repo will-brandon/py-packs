@@ -9,9 +9,9 @@ Revised:    -
 Defines a class that represents the command-line project dismantling operation.
 """
 
-import os
 from pathlib import Path
 from argparse import ArgumentParser, Namespace
+from pywbu.runtime import EXIT_SUCCESS
 from pywbu.annotations import override
 import pywbu.console as csl
 from pywbu.cli.op import Operation
@@ -23,7 +23,6 @@ class DismantleOperation(Operation):
     """
     Represents the command-line project dismantling operation.
     """
-
 
     def __init__(self) -> None:
         """
@@ -62,17 +61,21 @@ class DismantleOperation(Operation):
         """
 
         # Find the root of the project.
-        path = proj.root(Path(args.path))
+        root = proj.root(Path(args.path))
+
+        # If the project root could not be found display a warning and exit.
+        if not root:
+            csl.warn(f'No stax project found enclosing "{args.path}".', EXIT_SUCCESS)
 
         # Confirm that the user wants to perform this dangerous action unless the force flag was
         # specified.
         if not args.force and not csl.confirm('This will delete project configurations for ' \
-                                              + f'"{path}". Are you sure?'):
+                                              + f'"{root}". Are you sure?'):
             return
 
         # Try to dismantle the project.
         try:
-            proj.dismantle(path)
+            proj.dismantle(root)
         
         # If an exception is raised just display a warning message.
         except Exception as exc:
