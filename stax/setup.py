@@ -4,7 +4,7 @@ setup.py
 Type:       Python Package Setup Script
 Author:     Will Brandon
 Created:    June 23, 2023
-Revised:    July 2, 2023
+Revised:    July 6, 2023
 
 Builds and installs the stax package.
 """
@@ -22,7 +22,7 @@ setup.setup(
     license='GPL v3',
     author='Will Brandon',
     packages=setup.find_packages(),
-    #install_requires=['pywbu'],
+    install_requires=['pywbu'],
     entry_points={
         'console_scripts': [
             'stax=stax.cli.cli:main'

@@ -19,8 +19,9 @@
 *dist
 *.egg-info
 
-# Output / Builds
+# Output / Builds / Tests
 *.build
 *build
 *.output
 *output
+*.test

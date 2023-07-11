@@ -4,22 +4,22 @@ cli.py
 Type:       Python Script
 Author:     Will Brandon
 Created:    June 28, 2023
-Revised:    June 30, 2023
+Revised:    July 6, 2023
 
 The command-line entrypoint for the stax package.
 """
 
 import os
-from pathlib import Path
 from argparse import ArgumentParser, Namespace
 from pywbu.runtime import main, EXIT_SUCCESS
 import pywbu.console as csl
 from pywbu.cli.opset import OperationSet
 import stax
-import stax.project as proj
 from stax.cli.initop import InitOperation
 from stax.cli.dismantleop import DismantleOperation
 from stax.cli.rootop import RootOperation
+from stax.cli.configop import ConfigOperation
+from stax.cli.infoop import InfoOperation
 
 
 def configure_top_level_args(parser: ArgumentParser) -> None:
@@ -86,7 +86,7 @@ def parse_args(argv: list[str]) -> None:
     # Create the main argument parser.
     parser = ArgumentParser(
         prog=stax.PACK_NAME,
-        description='123 abc',
+        description='Web module configuration service using Docker Compose.',
         epilog=f'{stax.PACK_AUTHOR} | {stax.PACK_CREATION}')
     
     # Configure the arguments that reside on the top-level argument parser.
@@ -95,7 +95,8 @@ def parse_args(argv: list[str]) -> None:
     # Create an operation set for the operation positional argument. Add all the relevant operation
     # objects to the set.
     opset = OperationSet('operation')
-    opset.add_operations(InitOperation(), DismantleOperation(), RootOperation())
+    opset.add_operations(InitOperation(), DismantleOperation(), RootOperation(), ConfigOperation(),
+                         InfoOperation())
 
     # Configure the parser to use the operations in the operation set.
     opset.configure_parser(parser, True)

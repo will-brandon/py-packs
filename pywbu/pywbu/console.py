@@ -4,7 +4,7 @@ console.py
 Type:       Python Script
 Author:     Will Brandon
 Created:    June 15, 2023
-Revised:    July 2, 2023
+Revised:    July 6, 2023
 
 Contains functionality to interact with the console.
 """
@@ -59,7 +59,7 @@ Determines which input stream user interface responses will be read from.
 """
 
 
-def output(content: str, newline: bool=True) -> None:
+def output(content: str='', newline: bool=True) -> None:
     """
     Outputs the given content string to the output stream. By default a newline is included.
     """

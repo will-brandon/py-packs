@@ -4,7 +4,7 @@ dismantleop.py
 Type:       Python Script
 Author:     Will Brandon
 Created:    July 2, 2023
-Revised:    -
+Revised:    July 5, 2023
 
 Defines a class that represents the command-line project dismantling operation.
 """
@@ -33,7 +33,7 @@ class DismantleOperation(Operation):
         # description, and epilogue.
         super().__init__(
             name='dismantle',
-            help='removes the stax configuration from a project',
+            help='remove the stax configuration from a project',
             desc='Removes the stax configuration from a project in the current working directory ' \
                 + '(or at a specified directory) deeming the directory no longer a stax project. ' \
                 + 'All items inside the directory will be left untouched except for the stax ' \
@@ -51,7 +51,7 @@ class DismantleOperation(Operation):
         subparser.add_argument(
             '-f', '--force',
             action='store_true',
-            help='instructs the program to force the dismantling without a confirmation message')
+            help='force the dismantling without a confirmation message')
 
 
     @override
