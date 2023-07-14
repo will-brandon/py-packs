@@ -48,8 +48,7 @@ class InitOperation(Operation):
         # Add optional arguments to specify a project name and author.
         subparser.add_argument('-n', '--name', default=None, help='the title of the project')
         subparser.add_argument('-a', '--author', default=None, help='the author of the project')
-
-        pass
+        subparser.add_argument('-d', '--desc', default=None, help='a description of the project')
 
 
     @override
@@ -68,7 +67,7 @@ class InitOperation(Operation):
 
         # Try to initialize the project.
         try:
-            proj.init(path, args.name, args.author)
+            proj.init(path, args.name, args.author, args.desc)
         
         # If an exception is raised just display a warning message.
         except Exception as exc:

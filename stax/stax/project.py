@@ -59,7 +59,7 @@ def root(path: Path=fs.cwd()) -> Path:
     return root(path.parent)
 
 
-def init(root: Path, name: str=None, author: str=None) -> None:
+def init(root: Path, name: str=None, author: str=None, desc: str=None) -> None:
     """
     Initializes a stax project in the given directory. If the directory does not already exist it
     is recursively created. This also creates a metadata directory within the project.
@@ -70,7 +70,7 @@ def init(root: Path, name: str=None, author: str=None) -> None:
 
     # If the intended path for the metadata directory points to a file instead raise an exception.
     if meta_dir_path.is_file():
-        raise FileExistsError(f'Failed to create stax project at "{root}" because the ' \
+        raise NotADirectoryError(f'Failed to create stax project at "{root}" because the ' \
                               + f'"{META_DIR_NAME}" item already exists and is a file instead of ' \
                               + 'a directory.')
     
@@ -79,6 +79,13 @@ def init(root: Path, name: str=None, author: str=None) -> None:
     if meta_dir_path.is_dir():
         raise FileExistsError(f'Failed to create stax project at "{root}" because the directory ' \
                               + 'already a stax project.')
+    
+    # Ensure the name is not empty (None is file because a default value will be assigned).
+    if name == '':
+        raise ValueError('Failed to create stax project with a blank name.')
+    
+    # If the project name string is None use the root directory name as the project name.
+    name = root.name if not name else name
 
     # Recursively create the metadata directory at the given path (inherently creating the project
     # directory also if it does not already exist.) Assign the proper permissions.
@@ -87,13 +94,8 @@ def init(root: Path, name: str=None, author: str=None) -> None:
     # Create a new universal unique identifier for the project.
     uuid = uuid1()
 
-    # If the project name string is None or empty use the root directory name as the project name.
-    # If the author name string is None or empty use 'Unspecified' as the author name.
-    name = root.name if not name or name == '' else name
-    author = 'Unspecified' if not author or author == '' else author
-
     # Initialize the configuration file with todays date as the project creation date.
-    cfg.init_in_proj(root, uuid, name, author, date.today())
+    cfg.init_in_proj(root, uuid, name, date.today(), author, desc)
     
 
 def dismantle(root: Path) -> None:

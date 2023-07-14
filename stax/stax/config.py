@@ -33,66 +33,38 @@ value of 0 will insert newlines but no indentation.
 """
 
 
-def model_template(uuid: UUID, proj_name: str, proj_author: str, proj_creation_date: date) -> dict:
+def model_template(
+        uuid: UUID,
+        name: str,
+        creation_date: date,
+        author: str=None,
+        desc: str=None) -> dict:
     """
     Returns a dictionary object representing the start of a configuration model. A project UUID,
-    name, author, and creation date will be placed in the model.
+    name, and creation date, optional author, and optional description will be placed in the model.
     """
 
     return {
         "uuid": str(uuid),
-        "name": proj_name,
-        "author": proj_author,
-        "creation_date": date.strftime(proj_creation_date, DATE_FORMAT),
+        "name": name,
+        "creation_date": date.strftime(creation_date, DATE_FORMAT),
+        "author": author,
+        "description": desc,
         "modules": []
     }
 
 
-def init(
-        path: Path,
-        uuid: UUID,
-        proj_name: str,
-        proj_author: str,
-        proj_creation_date: date) -> None:
+def module_template(name: str, creation_date: date, desc: str=None) -> dict:
     """
-    Creates a new configuration file at the given path. The given project UUID, name, author, and
-    creation date will be placed in the JSON model.
+    Returns a dictionary object representing a module a configuration model. A module name, creation
+    date, and optional description will be placed in the model.
     """
 
-    # If the configuration file already exists raise an exception.
-    if path.is_file():
-        raise FileExistsError(f'Failed to create configuration file at "{path}" because the file ' \
-                              + 'already exists.')
-    
-    # Create the configuration file with the proper permissions.
-    path.touch(438, False)
-
-    # Create a template data model object to insert into the configuration file.
-    model = model_template(uuid, proj_name, proj_author, proj_creation_date)
-
-    # Open the configuration file for writing in an auto-closeable block.
-    with path.open('w') as file:
-
-        # Write the model object as JSON into the configuration file.
-        json.dump(model, file, indent=JSON_INDENT)
-
-
-def init_in_proj(
-        root: Path,
-        uuid: UUID,
-        proj_name: str,
-        proj_author: str,
-        proj_creation_date: date) -> None:
-    """
-    Creates a new configuration file in the metadata directory of a project. The given project UUID,
-    name, author, and creation date will be placed in the JSON model.
-    """
-
-    # Create a path to the configuration file within the project metadata directory.
-    path = root / proj.META_DIR_NAME / CONFIG_FILE_NAME
-
-    # Delegate to the path-explicit initializer.
-    init(path, uuid, proj_name, proj_author, proj_creation_date)
+    return {
+        "name": name,
+        "creation_date": date.strftime(creation_date, DATE_FORMAT),
+        "description": desc
+    }
 
 
 def read(path: Path) -> dict:
@@ -111,35 +83,100 @@ def read(path: Path) -> dict:
         return json.load(file)
 
 
-def read_in_proj(root: Path) -> dict:
-    """
-    Reads the configuration file for a project with the given root path into a configuration model
-    object.
-    """
+def write(path: Path, model: dict) -> None:
     
+    if not path.is_file():
+        raise FileNotFoundError(f'Failed to write configuration file at "{path}" because the file' \
+                                + ' does not exist.')
+    
+    # Open the configuration file for writing in an auto-closeable block.
+    with path.open('w') as file:
+
+        # Write the model object as JSON into the configuration file.
+        json.dump(model, file, indent=JSON_INDENT)
+
+
+def init(
+        path: Path,
+        uuid: UUID,
+        name: str,
+        creation_date: date,
+        author: str=None,
+        desc: str=None) -> None:
+    """
+    Creates a new configuration file at the given path. The given project UUID, name, creation date,
+    optional author, and optional description will be placed in the JSON model.
+    """
+
+    # If the configuration file already exists raise an exception.
+    if path.is_file():
+        raise FileExistsError(f'Failed to create configuration file at "{path}" because the file ' \
+                              + 'already exists.')
+    
+    # Create the configuration file with the proper permissions.
+    path.touch(438, False)
+
+    # Create a template data model object to insert into the configuration file.
+    model = model_template(uuid, name, creation_date, author, desc)
+
+    # Write the model to the configuration file at the given path.
+    write(path, model)
+
+
+def init_in_proj(
+        root: Path,
+        uuid: UUID,
+        name: str,
+        creation_date: date,
+        author: str=None,
+        desc: str=None) -> None:
+    """
+    Creates a new configuration file in the metadata directory of a project. The given project UUID,
+    name, creation date, optional author, and optional description will be placed in the JSON model.
+    """
+
     # Create a path to the configuration file within the project metadata directory.
     path = root / proj.META_DIR_NAME / CONFIG_FILE_NAME
 
-    # Delegate to the path-explicit reader.
-    return read(path)
+    # Delegate to the path-explicit initializer.
+    init(path, uuid, name, creation_date, author, desc)
 
 
-def add_module(path: Path, uuid: UUID, name: str, creation_date: str) -> bool:
+def set_module(path: Path, name: str, creation_date: str, desc: str=None) -> bool:
+    """
+    Sets the given module data in the configuration file at the given path. If a model with the
+    given name already exists the properties of that module are updated and true is returned.
+    """
 
+    # Create a model for a module.
+    module_model = module_template(name, creation_date, desc)
+
+    # Read the current model.
     model = read(path)
 
-    # Change this so it looks for the name and uuid properties within each model object
-    #if uuid in model['modules'] or name in model['modules']:
-   #     return False
+    for i, module in enumerate(model['modules']):
+        
+        if module['name'] == name:
 
-    model['modules']
-    return True
+            model['modules'][i] = module_model
+            return True
+
+    model['modules'].append(module_model)
+
+    write(path, model)
+
+    return False    
 
 
-def add_module_in_proj(root: Path) -> bool:
+def set_module_in_proj(root: Path, name: str, creation_date: str, desc: str=None) -> bool:
+    """
+    Sets the given module data in the configuration file for a project with the given root path. If
+    a model with the given name already exists the properties of that module are updated and true is
+    returned.
+    """
     
     # Create a path to the configuration file within the project metadata directory.
     path = root / proj.META_DIR_NAME / CONFIG_FILE_NAME
 
     # Delegate to the path-explicit add module function.
-    return add_module(path)
+    return set_module(path, name, creation_date, desc)

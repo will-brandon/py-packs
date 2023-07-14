@@ -10,7 +10,6 @@ Manages stax project web modules.
 """
 
 from pathlib import Path
-from datetime import date
 import config as cfg
 
 
@@ -50,8 +49,7 @@ def init(root: Path) -> bool:
     for item in root.iterdir():
 
         if item.is_dir():
-
-            
+            pass
 
     return True
     
