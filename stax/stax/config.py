@@ -13,7 +13,7 @@ from pathlib import Path
 from uuid import UUID
 from datetime import date
 import json
-import stax.project as proj
+import pywbu.filesystem as fs
 
 
 DATE_FORMAT = '%Y-%m-%d'
@@ -28,26 +28,28 @@ value of 0 will insert newlines but no indentation.
 """
 
 
-class Config:
+class Config(object):
+    """
+    Produces objects to manage configuration files.
+    """
 
     path: Path
     """
-    The path to the configuration file.
+    The canonical path to the configuration file.
     """
 
 
     def __init__(self, path: Path) -> None:
         """
-        Creates a configuration data object for a file with the given path.
+        Creates a configuration file manager for a file with the given path.
         """
 
         # If the configuration file doesn't exist raise an exception.
         if not path.is_file():
-            raise FileNotFoundError(f'Failed to get the configuration data from the configuration' \
-                                    + f'file at "{path}" becuase it does not exist.')
+            raise FileNotFoundError(f'No configuration file exists at "{path}".')
         
-        # Initialize the path property.
-        self.path = path
+        # Initialize the path property with the canonical version of the path.
+        self.path = fs.canonical_path(path)
 
 
     def __model_template(
@@ -67,21 +69,21 @@ class Config:
             "name": name,
             "creation_date": date.strftime(creation_date, DATE_FORMAT),
             "author": author,
-            "description": desc,
+            "desc": desc,
             "modules": []
         }
 
 
     def __module_template(self, name: str, creation_date: date, desc: str=None) -> dict:
         """
-        Returns a dictionary object representing a module a configuration model. A module name, creation
-        date, and optional description will be placed in the model.
+        Returns a dictionary object representing a module a configuration model. A module name,
+        creation date, and optional description will be placed in the model.
         """
 
         return {
             "name": name,
             "creation_date": date.strftime(creation_date, DATE_FORMAT),
-            "description": desc
+            "desc": desc
         }
 
 
@@ -110,6 +112,10 @@ class Config:
     
 
     def model(self) -> dict:
+        """
+        Returns the model dictionary object.
+        """
+        
         return self.__read()
 
     
@@ -119,6 +125,9 @@ class Config:
               creation_date: date,
               author: str=None,
               desc: str=None) -> None:
+        """
+        Resets the configuration file content to a new model object with the given properties.
+        """
 
         # Create a template data model object to insert into the configuration file.
         model = self.__model_template(uuid, name, creation_date, author, desc)
@@ -129,8 +138,8 @@ class Config:
 
     def set_module(self, name: str, creation_date: str, desc: str=None) -> bool:
         """
-        Sets the given module data in the configuration file. If a model with the given name already
-        exists the properties of that module are updated and true is returned.
+        Sets the given module data in the configuration file. If a module with the given name
+        already exists the properties of that module are updated and true is returned.
         """
 
         # Create a model for a module.
@@ -163,7 +172,7 @@ class Config:
         return False
 
 
-def init(
+def create_config(
         path: Path,
         uuid: UUID,
         name: str,
@@ -184,7 +193,9 @@ def init(
     # Create the configuration file with the proper permissions.
     path.touch(438, False)
 
+    # Create a configuration manager object and use it to reset the content to new starting content.
     config = Config(path)
     config.reset(uuid, name, creation_date, author, desc)
 
+    # Return the configuration manager object.
     return config

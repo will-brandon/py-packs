@@ -4,7 +4,7 @@ rootop.py
 Type:       Python Script
 Author:     Will Brandon
 Created:    July 4, 2023
-Revised:    July 5, 2023
+Revised:    July 14, 2023
 
 Defines a class that represents the command-line display project root operation.
 """
@@ -16,7 +16,7 @@ from pywbu.annotations import override
 import pywbu.console as csl
 from pywbu.cli.op import Operation
 import stax
-import stax.project as proj
+from stax.project import *
 
 
 class RootOperation(Operation):
@@ -35,7 +35,7 @@ class RootOperation(Operation):
             name='root',
             help='display the path to the project root directory',
             desc='Displays the path to the project root directory in the project tree. This is ' \
-                + f'the directory that contains the metadata directory "{proj.META_DIR_NAME}".',
+                + f'the directory that contains the metadata directory "{PROJ_META_DIR_NAME}".',
             epilog=f'{stax.PACK_AUTHOR} | {stax.PACK_CREATION}')
     
 
@@ -54,12 +54,12 @@ class RootOperation(Operation):
         Executes the operation given a namespace of parsed arguments.
         """
 
-        # Find the root of the project.
-        root = proj.root(Path(args.path))
+        # Find the enclosing project.
+        proj = enclosing_project(Path(args.path))
 
-        # If the project root could not be found display a warning and exit.
-        if not root:
+        # If the project could not be found display a warning and exit.
+        if not proj:
             csl.warn(f'No stax project found enclosing "{args.path}".', EXIT_SUCCESS)
         
         # Output the root of the project to the console.
-        csl.output(root)            
+        csl.output(proj.root)            

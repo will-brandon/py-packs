@@ -17,8 +17,7 @@ from pywbu.annotations import override
 import pywbu.console as csl
 from pywbu.cli.op import Operation
 import stax
-import stax.project as proj
-import stax.config as cfg
+from stax.project import *
 
 
 JSON_INDENT = 2
@@ -54,7 +53,10 @@ class InfoOperation(Operation):
         Configures the arguments of the subparser.
         """
 
-        subparser.add_argument('-j', '--json', default=None, help='display the info model as JSON')
+        subparser.add_argument(
+            '-j', '--json',
+            action='store_true',
+            help='display the info model as JSON')
 
 
     @override
@@ -63,15 +65,15 @@ class InfoOperation(Operation):
         Executes the operation given a namespace of parsed arguments.
         """
 
-        # Find the root of the project.
-        root = proj.root(Path(args.path))
+        # Find the enclosing project.
+        proj = enclosing_project(Path(args.path))
 
-        # If the project root could not be found display a warning and exit.
-        if not root:
+        # If the project could not be found display a warning and exit.
+        if not proj:
             csl.warn(f'No stax project found enclosing "{args.path}".', EXIT_SUCCESS)
 
         # Read the model object from the configuration file.
-        model = cfg.read_in_proj(root)
+        model = proj.config().model()
 
         # If the JSON argument is specified, output the model as a formatted JSON string and return.
         if (args.json):
@@ -79,7 +81,7 @@ class InfoOperation(Operation):
             return
         
         # Output the json configuration model to the console.
-        csl.output(f'Location: {root}')
+        csl.output(f'Location: {proj.root}')
         csl.output(f'UUID:     {model["uuid"]}')
         csl.output(f'Name:     {model["name"]}')
         csl.output(f'Modules:  {len(model["modules"])}')

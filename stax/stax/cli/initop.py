@@ -15,7 +15,7 @@ from pywbu.annotations import override
 import pywbu.console as csl
 from pywbu.cli.op import Operation
 import stax
-import stax.project as proj
+from stax.project import *
 
 
 class InitOperation(Operation):
@@ -35,7 +35,7 @@ class InitOperation(Operation):
             help='create a new stax project',
             desc='Creates a new stax project in the current working directory (or at a specified ' \
                 + 'directory). The content of the directory becomes part of the project. A ' \
-                + f'metadata subdirectory, "{proj.META_DIR_NAME}", will be created.',
+                + f'metadata subdirectory, "{PROJ_META_DIR_NAME}", will be created.',
             epilog=f'{stax.PACK_AUTHOR} | {stax.PACK_CREATION}')
 
 
@@ -61,13 +61,13 @@ class InitOperation(Operation):
         path = Path(args.path)
 
         # If the path already points to a stax project display a warning and return immediately.
-        if proj.is_project(path):
+        if is_project(path):
             csl.warn(f'The given path already points to a stax project: "{path}".')
             return
 
         # Try to initialize the project.
         try:
-            proj.init(path, args.name, args.author, args.desc)
+            create_project(path, args.name, args.author, args.desc)
         
         # If an exception is raised just display a warning message.
         except Exception as exc:
