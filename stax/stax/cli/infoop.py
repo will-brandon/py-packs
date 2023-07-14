@@ -4,12 +4,13 @@ infoop.py
 Type:       Python Script
 Author:     Will Brandon
 Created:    July 6, 2023
-Revised:    -
+Revised:    July 14, 2023
 
 Defines a class that represents the command-line project information operation.
 """
 
 from pathlib import Path
+import json
 from argparse import ArgumentParser, Namespace
 from pywbu.runtime import EXIT_SUCCESS
 from pywbu.annotations import override
@@ -18,6 +19,13 @@ from pywbu.cli.op import Operation
 import stax
 import stax.project as proj
 import stax.config as cfg
+
+
+JSON_INDENT = 2
+"""
+The level of indent to use for formatting JSON. A value of None will not format the JSON at all. A
+value of 0 will insert newlines but no indentation.
+"""
 
 
 class InfoOperation(Operation):
@@ -46,7 +54,7 @@ class InfoOperation(Operation):
         Configures the arguments of the subparser.
         """
 
-        pass
+        subparser.add_argument('-j', '--json', default=None, help='display the info model as JSON')
 
 
     @override
@@ -64,11 +72,23 @@ class InfoOperation(Operation):
 
         # Read the model object from the configuration file.
         model = cfg.read_in_proj(root)
+
+        # If the JSON argument is specified, output the model as a formatted JSON string and return.
+        if (args.json):
+            csl.output(json.dumps(model, indent=JSON_INDENT))
+            return
         
         # Output the json configuration model to the console.
         csl.output(f'Location: {root}')
         csl.output(f'UUID:     {model["uuid"]}')
         csl.output(f'Name:     {model["name"]}')
-        csl.output(f'Author:   {model["author"]}')
-        csl.output(f'Created:  {model["creation_date"]}')
         csl.output(f'Modules:  {len(model["modules"])}')
+        csl.output(f'Created:  {model["creation_date"]}')
+        
+        # If an author was specified, display the author.
+        if model['author']:
+            csl.output(f'Author:   {model["author"]}')
+        
+        # If a description was specified, display the description.
+        if model['desc']:
+            csl.output(f'\n{model["desc"]}')

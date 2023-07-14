@@ -4,7 +4,7 @@ cli.py
 Type:       Python Script
 Author:     Will Brandon
 Created:    June 28, 2023
-Revised:    July 6, 2023
+Revised:    July 14, 2023
 
 The command-line entrypoint for the stax package.
 """
@@ -18,7 +18,6 @@ import stax
 from stax.cli.initop import InitOperation
 from stax.cli.dismantleop import DismantleOperation
 from stax.cli.rootop import RootOperation
-from stax.cli.configop import ConfigOperation
 from stax.cli.infoop import InfoOperation
 
 
@@ -95,8 +94,7 @@ def parse_args(argv: list[str]) -> None:
     # Create an operation set for the operation positional argument. Add all the relevant operation
     # objects to the set.
     opset = OperationSet('operation')
-    opset.add_operations(InitOperation(), DismantleOperation(), RootOperation(), ConfigOperation(),
-                         InfoOperation())
+    opset.add_operations(InitOperation(), DismantleOperation(), RootOperation(), InfoOperation())
 
     # Configure the parser to use the operations in the operation set.
     opset.configure_parser(parser, True)

@@ -4,7 +4,7 @@ initop.py
 Type:       Python Script
 Author:     Will Brandon
 Created:    July 2, 2023
-Revised:    July 5, 2023
+Revised:    July 14, 2023
 
 Defines a class that represents the command-line project initialization operation.
 """
@@ -45,7 +45,7 @@ class InitOperation(Operation):
         Configures the arguments of the subparser.
         """
 
-        # Add optional arguments to specify a project name and author.
+        # Add optional arguments to specify a project name, author, and descripton.
         subparser.add_argument('-n', '--name', default=None, help='the title of the project')
         subparser.add_argument('-a', '--author', default=None, help='the author of the project')
         subparser.add_argument('-d', '--desc', default=None, help='a description of the project')

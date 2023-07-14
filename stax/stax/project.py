@@ -23,6 +23,11 @@ The name of the directory that indicates that the parent directory contains a st
 metadata is stored within the directory.
 """
 
+CONFIG_FILE_NAME = 'config.json'
+"""
+The name of the configuration file.
+"""
+
 
 def is_project(root: Path) -> bool:
     """
@@ -57,6 +62,24 @@ def root(path: Path=fs.cwd()) -> Path:
 
     # Recursively check the parent directory to see if it is a stax project.
     return root(path.parent)
+
+
+def config(path: Path=fs.cwd()) -> cfg.Config:
+    """
+    Returns a configuration manager object for a configuration file within the stax project
+    encompasing the given path.
+    """
+
+    # Ensure the root directory is a stax project.
+    if not is_project(root):
+        raise FileNotFoundError(f'Failed to get the configuration for stax project at "{root}"' \
+                                + 'because the directory is not a stax project.')
+
+    # Create a path to the configuration file within the project metadata directory.
+    path = root / META_DIR_NAME / CONFIG_FILE_NAME
+
+    # Return a configuration object for a configuration file at the given path.
+    return cfg.Config(path)
 
 
 def init(root: Path, name: str=None, author: str=None, desc: str=None) -> None:
@@ -94,8 +117,13 @@ def init(root: Path, name: str=None, author: str=None, desc: str=None) -> None:
     # Create a new universal unique identifier for the project.
     uuid = uuid1()
 
+    # Create a path to the configuration file within the project metadata directory.
+    config_path = root / META_DIR_NAME / CONFIG_FILE_NAME
+
     # Initialize the configuration file with todays date as the project creation date.
-    cfg.init_in_proj(root, uuid, name, date.today(), author, desc)
+    config = cfg.init(config_path, uuid, name, date.today(), author, desc)
+
+    config.set_module('hello', date.today(), 'test module')
     
 
 def dismantle(root: Path) -> None:
